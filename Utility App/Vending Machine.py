@@ -62,7 +62,7 @@ def payment_transaction(cost):
 def Dispensing_unit():
     while True:  # it loops until the exit is chosen as an option
         menu_shown()  # shows what is available in the menu and shows the information
-        customer_choice = input("Choose a product you would like to buy (or press '0' to exit): ")
+        customer_choice = input("Choose a product you would like to buy (or press '0' to exit): ").upper()
 
         if customer_choice == "0":  # if the customer choice is 0 it exits the vending machine
             print("Thank you for using Manaar's & Momo's vending machine!!!")
@@ -86,32 +86,36 @@ def Dispensing_unit():
 
         #asks the customer if they want tea or coffee
         if customer_choice.startswith("C"):#if the customer chooses a code that starts with c
-            extra_product = input("Would you like some coffee or tea to go with your cookie? (1/9): ")#this is asked 
-            if extra_product== '1':
-                choice_of_drink = input("Choose a beverage you would like with your cookie- Black coffee(E1), Iced coffee(E2), Green Tea (F1), Iced tea(F2): ")
-                if choice_of_drink in ["E1", "E2", "F1", "F2"]:#customer is given a choice
-                    beverage = products[choice_of_drink]
-                    if beverage["Remaining"] > 0:
-                        print(f"Choosing {beverage['label']} to your additional order for AED {beverage['cost']}.")
-                        beverage["Remaining"] -= 1
-                        payment_transaction(beverage["cost"])#asks for the costs of the beverage bought
-                        print(f"Releasing {beverage['label']}..Thank you for your purchase at Manaar's & Momo's vending machine!!!")
-                    else:
-                        print(f"Sorry but {beverage['label']} is out of stock.")
-        elif customer_choice.startswith("E") or customer_choice.startswith("F"): #if the customer chooses a code that starts with E or F
-            choice_of_cookie = input("Would you like a cookie to go with your beverage? (1/9): ")#asks the customer if they want a cookie 
-            if choice_of_cookie == '1':
-                selecting_cookie = input("What cookie would you like to have with your beverage? - White Chocolate (C1), Chocolate Chip (C2), Oatmeal Raisin (C3): ")
-                if selecting_cookie in ["C1", "C2", "C3"]:
-                    cookie = products[selecting_cookie]
-                    if cookie["Remaining"] > 0:
-                        print(f"Adding {cookie['label']} to your order for ${cookie['cost']}.")
-                        cookie["Remaining"] -= 1
-                        payment_transaction(cookie["cost"])    #asks for the costs of the cookie bought
-                        print(f"Releasing {cookie['label']}, Thank you for your purchase at Manaar's & Momo's vending machine!!!")
-                    else:
-                        print(f"Sorry but {cookie['label']} is out of stock.")
-    
+         extra_product = input("Would you like some coffee or tea to go with your cookie? (1Y/9N): ")#this is asked 
+        if extra_product == '1':
+         choice_of_drink = input("Choose a beverage you would like with your cookie - Black coffee (E1), Iced coffee (E2), Green Tea (F1), Iced tea (F2): ")
+        if choice_of_drink in ["E1", "E2", "F1", "F2"]:#customer is given a choice
+            beverage = products[choice_of_drink]
+            if beverage["Remaining"] > 0:
+                print(f"Adding {beverage['label']} to your additional order for AED {beverage['cost']}.")
+                left = payment_transaction(beverage["cost"])#calculate payment for the beverage
+                beverage["Remaining"] -= 1#decrease stock
+                print(f"Releasing {beverage['label']}..Thank you for your purchase at Manaar's & Momo's vending machine!!!\n")
+                if left > 0:
+                    print(f"Returning change: AED {left:.2f}")#return remaining change
+            else:
+                print(f"Sorry, {beverage['label']} is out of stock.")
+                
+        elif customer_choice.startswith("E") or customer_choice.startswith("F"):#if the customer chooses a code that starts with E or F
+            choice_of_cookie = input("Would you like a cookie to go with your beverage? (1Y/9N): ")#asks the customer if they want a cookie
+        if choice_of_cookie == '1':
+         selecting_cookie = input("What cookie would you like to have with your beverage? - White Chocolate (C1), Chocolate Chip (C2), Oatmeal Raisin (C3): ")
+        if selecting_cookie in ["C1", "C2", "C3"]:
+            cookie = products[selecting_cookie]
+            if cookie["Remaining"] > 0:
+                print(f"Adding {cookie['label']} to your order for AED {cookie['cost']}.")
+                left = payment_transaction(cookie["cost"])#calculate payment for the cookie
+                cookie["Remaining"] -= 1#deduct stock
+                print(f"Releasing {cookie['label']}... Thank you for your purchase!")
+                if left > 0:
+                    print(f"Returning change: AED {left:.2f}")#return remaining change
+            else:
+                print(f"Sorry, {cookie['label']} is out of stock.")
 
 # Run the function to start the vending machine
 Dispensing_unit()
