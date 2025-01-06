@@ -50,72 +50,85 @@ def menu_shown():
     print("0. Exit")#if the customer does not want anything they can exit by clicking on 0
 
 def payment_transaction(cost):
-    amount_inserted = 0 #this makes sure that it starts with no money
-    while amount_inserted < cost:#this prompt asks for the right amount until its input by the customer
-        try:
-            money = float(input(f"Input coins (AED {cost - amount_inserted:.2f} remaining): "))#tells the customer how much is left to be input by them
-            amount_inserted += money#this adds to the total money that has been inserted
-        except ValueError:
-            print("An error has occurred, Please use real coins.")#if the customer enters anything except integers this is printed
-    return amount_inserted - cost #if the customer enters anything higher than the cost, remaining is returned
+    while True:
+        payment_method = input("Would you like to pay by Cash or Card? (Enter 'Cash' or 'Card'): ").strip().lower()
+        
+        if payment_method == "cash":
+            amount_inserted = 0#this makes sure that it starts with no money
+            while amount_inserted < cost:#this prompt asks for the right amount until its input by the customer
+                try:
+                    money = float(input(f"Input coins (AED {cost - amount_inserted:.2f} remaining): "))#tells the customer how much is left to be input by them
+                    amount_inserted += money#this adds to the total money that has been inserted
+                except ValueError:
+                    print("An error has occurred, Please use real coins.")#if the customer enters anything except integers this is printed
+            return amount_inserted - cost#if the customer enters anything higher than the cost, remaining is returned
+        
+        elif payment_method == "card":
+            print(f"Processing AED {cost:.2f} on your card... Payment Successful!")#simulate card payment
+            return 0#no change is returned for card payments
+        
+        else:
+            print("Invalid option. Please select 'Cash' or 'Card'.")
+
 
 def Dispensing_unit():
-    while True:  # it loops until the exit is chosen as an option
-        menu_shown()  # shows what is available in the menu and shows the information
+    while True:#it loops until the exit is chosen as an option
+        menu_shown()#shows what is available in the menu and shows the information
         customer_choice = input("Choose a product you would like to buy (or press '0' to exit): ").upper()
 
-        if customer_choice == "0":  # if the customer choice is 0 it exits the vending machine
+        if customer_choice == "0":#if the customer choice is 0 it exits the vending machine
             print("Thank you for using Manaar's & Momo's vending machine!!!")
-            break  # breaks the loop and that is the end of the function
+            break#breaks the loop and that is the end of the function
         if customer_choice not in products:
-            print("Wrong Code, Please enter the right code.")  # If it is a code that is not there in the menu this is printed
-            continue  # customer is asked to re-enter the right code
+            print("Wrong Code, Please enter the right code.")#If it is a code that is not there in the menu this is printed
+            continue#customer is asked to re-enter the right code
 
-        product = products[customer_choice]  # gets the information of the product that was chosen by the customer
+        product = products[customer_choice]#gets the information of the product that was chosen by the customer
         if product["Remaining"] == 0:
-            print(f"Sorry but {product['label']} is out of stock.")  # it prints this if the product chosen is out of stock
-            continue  # customer is asked to re-enter a code
+            print(f"Sorry but {product['label']} is out of stock.")#it prints this if the product chosen is out of stock
+            continue#customer is asked to re-enter a code
 
-        print(f"You selected {product['label']} for  AED {product['cost']}.")  # shows the cost and the product selected by the customer
-        left = payment_transaction(product["cost"])  # this calls the function and calculates the change
-        product["Remaining"] -= 1  # removes 1 from the stock of the product that was just purchased
-        print(f"Releasing {product['label']}...")  # shows the customer that their product is on its way
-        if left > 0:  # shows the user the remaining amount if any
-            print(f"Returning change: AED {left:.2f}")  # returns the remaining extra amount
-        print("Thank you for your purchase at Manaar's & Momo's vending machine!!!\n")  # the last text after the customer is done
+        print(f"You selected {product['label']} for AED {product['cost']}.")#shows the cost and the product selected by the customer
+        left = payment_transaction(product["cost"])#this calls the function and calculates the change
+        product["Remaining"] -= 1#removes 1 from the stock of the product that was just purchased
+        print(f"Releasing {product['label']}...")#shows the customer that their product is on its way
+        if left > 0:#shows the user the remaining amount if any
+            print(f"Returning change: AED {left:.2f}")#returns the remaining extra amount
+        print("Thank you for your purchase at Manaar's & Momo's vending machine!!!\n")#the last text after the customer is done
 
         #asks the customer if they want tea or coffee
         if customer_choice.startswith("C"):#if the customer chooses a code that starts with c
-         extra_product = input("Would you like some coffee or tea to go with your cookie? (1Y/9N): ")#this is asked 
-        if extra_product == '1':
-         choice_of_drink = input("Choose a beverage you would like with your cookie - Black coffee (E1), Iced coffee (E2), Green Tea (F1), Iced tea (F2): ")
-        if choice_of_drink in ["E1", "E2", "F1", "F2"]:#customer is given a choice
-            beverage = products[choice_of_drink]
-            if beverage["Remaining"] > 0:
-                print(f"Adding {beverage['label']} to your additional order for AED {beverage['cost']}.")
-                left = payment_transaction(beverage["cost"])#calculate payment for the beverage
-                beverage["Remaining"] -= 1#decrease stock
-                print(f"Releasing {beverage['label']}..Thank you for your purchase at Manaar's & Momo's vending machine!!!\n")
-                if left > 0:
-                    print(f"Returning change: AED {left:.2f}")#return remaining change
-            else:
-                print(f"Sorry, {beverage['label']} is out of stock.")
-                
+            extra_product = input("Would you like some coffee or tea to go with your cookie? (Y/N): ").upper()#this is asked
+            if extra_product == "Y":
+                choice_of_drink = input("Choose a beverage you would like with your cookie - Black coffee (E1), Iced coffee (E2), Green Tea (F1), Iced tea (F2): ").upper()
+                if choice_of_drink in ["E1", "E2", "F1", "F2"]:#customer is given a choice
+                    beverage = products[choice_of_drink]
+                    if beverage["Remaining"] > 0:
+                        print(f"Adding {beverage['label']} to your additional order for AED {beverage['cost']}.")
+                        left = payment_transaction(beverage["cost"])#calculate payment for the beverage
+                        beverage["Remaining"] -= 1#decrease stock
+                        print(f"Releasing {beverage['label']}... Thank you for your purchase at Manaar's & Momo's vending machine!!!\n")
+                        if left > 0:
+                            print(f"Returning change: AED {left:.2f}")#return remaining change
+                    else:
+                        print(f"Sorry, {beverage['label']} is out of stock.")
+
         elif customer_choice.startswith("E") or customer_choice.startswith("F"):#if the customer chooses a code that starts with E or F
-            choice_of_cookie = input("Would you like a cookie to go with your beverage? (1Y/9N): ")#asks the customer if they want a cookie
-        if choice_of_cookie == '1':
-         selecting_cookie = input("What cookie would you like to have with your beverage? - White Chocolate (C1), Chocolate Chip (C2), Oatmeal Raisin (C3): ")
-        if selecting_cookie in ["C1", "C2", "C3"]:
-            cookie = products[selecting_cookie]
-            if cookie["Remaining"] > 0:
-                print(f"Adding {cookie['label']} to your order for AED {cookie['cost']}.")
-                left = payment_transaction(cookie["cost"])#calculate payment for the cookie
-                cookie["Remaining"] -= 1#deduct stock
-                print(f"Releasing {cookie['label']}... Thank you for your purchase!")
-                if left > 0:
-                    print(f"Returning change: AED {left:.2f}")#return remaining change
-            else:
-                print(f"Sorry, {cookie['label']} is out of stock.")
+            choice_of_cookie = input("Would you like a cookie to go with your beverage? (Y/N): ").upper()#asks the customer if they want a cookie
+            if choice_of_cookie == 'Y':
+                selecting_cookie = input("What cookie would you like to have with your beverage? - White Chocolate (C1), Chocolate Chip (C2), Oatmeal Raisin (C3): ").upper()
+                if selecting_cookie in ["C1", "C2", "C3"]:
+                    cookie = products[selecting_cookie]
+                    if cookie["Remaining"] > 0:
+                        print(f"Adding {cookie['label']} to your order for AED {cookie['cost']}.")
+                        left = payment_transaction(cookie["cost"])#calculate payment for the cookie
+                        cookie["Remaining"] -= 1#deduct stock
+                        print(f"Releasing {cookie['label']}... Thank you for your purchase!")
+                        if left > 0:
+                            print(f"Returning change: AED {left:.2f}")#return remaining change
+                    else:
+                        print(f"Sorry, {cookie['label']} is out of stock.")
+
 
 # Run the function to start the vending machine
 Dispensing_unit()
