@@ -1,53 +1,65 @@
 #adding all the items and assigning different codes
-print("Welcome to Manaar's & Momo's Vending machine!!!")
+print("Welcome to Manaar's & Momo's Vending Machine!!!")
+
 products = {
     "A1": {"label": "Snacks - Original Lays Chips", 
-           "cost": 1.95, "Remaining": 3},#naming this product as a snack
+           "cost": 1.95, "Remaining": 3}, #naming this product as a snack
     "A2": {"label": "Snacks - French Cheese Chips",
-            "cost": 1.95, "Remaining": 1},#naming this product as a snack
+            "cost": 1.95, "Remaining": 1}, #naming this product as a snack
     "A3": {"label": "Snacks - Peanut Butter Crackers", 
-           "cost": 3.50, "Remaining": 7},#naming this product as a snack
+           "cost": 3.50, "Remaining": 7}, #naming this product as a snack
     "A4": {"label": "Snacks - Masala Peanuts", 
-           "cost": 3.25, "Remaining": 4},#naming this product as a snack
+           "cost": 3.25, "Remaining": 4}, #naming this product as a snack
     "B1": {"label": "Chocolate - Galaxy Milk Chocolate",
-            "cost": 3.00, "Remaining": 3},#naming this product as a chocolate
+            "cost": 3.00, "Remaining": 3}, #naming this product as a chocolate
     "B2": {"label": "Chocolate - Snickers",
-            "cost": 3.00, "Remaining": 0},#naming this product as a chocolate
+            "cost": 3.00, "Remaining": 0}, #naming this product as a chocolate
     "B3": {"label": "Chocolate - KitKat", 
-           "cost": 2.00, "Remaining": 5},#naming this product as a chocolate
+           "cost": 2.00, "Remaining": 5}, #naming this product as a chocolate
     "C1": {"label": "Cookies - White Chocolate Chip Cookies",
-            "cost": 3.50, "Remaining": 4},#naming this product as a cookie
+            "cost": 3.50, "Remaining": 4}, #naming this product as a cookie
     "C2": {"label": "Cookies - Premium Chocolate Chip Cookies", 
-           "cost": 5.75, "Remaining": 1},#naming this product as a cookie
+           "cost": 5.75, "Remaining": 1}, #naming this product as a cookie
     "C3": {"label": "Cookies - Oatmeal Raisin Cookies", 
-           "cost": 2.75, "Remaining": 10},#naming this product as a cookie
+           "cost": 2.75, "Remaining": 10}, #naming this product as a cookie
     "D1": {"label": "Beverages - Mai Dubai Water", 
-           "cost": 1.00, "Remaining": 2},#naming this product as a beverage
+           "cost": 1.00, "Remaining": 2}, #naming this product as a beverage
     "D2": {"label": "Beverages - Cold Water", 
-           "cost": 1.25, "Remaining": 3},#naming this product as a beverage
+           "cost": 1.25, "Remaining": 3}, #naming this product as a beverage
     "D3": {"label": "Beverages - Zero Coca Cola", 
-           "cost": 2.50, "Remaining": 5},#naming this product as a beverage
+           "cost": 2.50, "Remaining": 5}, #naming this product as a beverage
     "D4": {"label": "Beverages - Sprite", 
-           "cost": 2.50, "Remaining": 4},#naming this product as a beverage
+           "cost": 2.50, "Remaining": 4}, #naming this product as a beverage
     "D5": {"label": "Beverages - Fanta", 
-           "cost": 2.50, "Remaining": 7},#naming this product as a beverage
+           "cost": 2.50, "Remaining": 7}, #naming this product as a beverage
     "D6": {"label": "Beverages - Redbull", 
-           "cost": 9.75, "Remaining": 1},#naming this product as a beverage
+           "cost": 9.75, "Remaining": 1}, #naming this product as a beverage
     "E1": {"label": "Coffee - Black Coffee", 
-           "cost": 2.50, "Remaining": 5},#naming this product as a coffee
+           "cost": 2.50, "Remaining": 5}, #naming this product as a coffee
     "E2": {"label": "Coffee - Iced Coffee", 
-           "cost": 5.00, "Remaining": 8},#naming this product as a coffee
+           "cost": 5.00, "Remaining": 8}, #naming this product as a coffee
     "F1": {"label": "Tea - Green Tea", 
-           "cost": 2.25, "Remaining": 10},#naming this product as a tea
+           "cost": 2.25, "Remaining": 10}, #naming this product as a tea
     "F2": {"label": "Tea - Iced Tea", 
-           "cost": 2.75, "Remaining": 0},#naming this product as a tea
-}
+           "cost": 2.75, "Remaining": 0}, #naming this product as a tea
+} 
 
-def menu_shown():
+# Display the products in tabular format
+def menu_shown(): 
+    print(f"{'Code':<5} {'Product':<40} {'Cost (AED)':<10} {'Remaining':<10}")
+    print("-" * 65)
     print("\n-- What would you like to purchase? --")
-    for code, product in products.items():
-        print(f"{code}. {product['label']} - AED {product['cost']} (Remaining: {product['Remaining']})")#this code is so that the customer can get all the information in a simple way
-    print("0. Exit")#if the customer does not want anything they can exit by clicking on 0
+    
+    category_mnr = ""  # initialize current category to empty string
+    for code, info in products.items():
+        qtpie = code[0]  # extract the category (A, B, C, etc.)
+        if qtpie != category_mnr:
+            if category_mnr:  # add a line separator after the previous category
+                print("-" * 65)
+            category_mnr = qtpie
+        print(f"{code:<5} {info['label']:<40} {info['cost']:<10.2f} {info['Remaining']:<10}")
+    
+    print("0. Exit")  # if the customer does not want anything they can exit by clicking on 0
 
 def payment_transaction(cost):
     while True:
@@ -64,8 +76,8 @@ def payment_transaction(cost):
             return amount_inserted - cost#if the customer enters anything higher than the cost, remaining is returned
         
         elif payment_method == "card":
-            print(f"Processing AED {cost:.2f} on your card... Payment Successful!")#simulate card payment
-            return 0#no change is returned for card payments
+            print(f"Executing AED {cost:.2f} on your card... The payment was successful!!!")#tells the customer that the card is being processed
+            return 0#there is no returning of change since its card
         
         else:
             print("Invalid option. Please select 'Cash' or 'Card'.")
