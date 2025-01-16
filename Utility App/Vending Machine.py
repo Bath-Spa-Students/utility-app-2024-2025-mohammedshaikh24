@@ -44,22 +44,21 @@ products = {
            "cost": 2.75, "Remaining": 0}, #naming this product as a tea
 } 
 
-# Display the products in tabular format
-def menu_shown(): 
+def menu_shown(): #this shows the whole menu in a table form so it looks clean
     print(f"{'Code':<5} {'Product':<40} {'Cost (AED)':<10} {'Remaining':<10}")
     print("-" * 65)
     print("\n-- What would you like to purchase? --")
     
-    category_mnr = ""  # initialize current category to empty string
+    category_mnr = ""  #sets the initial value of the category mnr to a blank string.
     for code, info in products.items():
-        qtpie = code[0]  # extract the category (A, B, C, etc.)
+        qtpie = code[0]  #retrieve the category identifier such as A,B,C and stuff from the code.
         if qtpie != category_mnr:
-            if category_mnr:  # add a line separator after the previous category
+            if category_mnr:  #this adds a line before and after each category
                 print("-" * 65)
             category_mnr = qtpie
         print(f"{code:<5} {info['label']:<40} {info['cost']:<10.2f} {info['Remaining']:<10}")
     
-    print("0. Exit")  # if the customer does not want anything they can exit by clicking on 0
+    print("0. Exit")  #if the customer does not want anything they can exit by clicking on 0
 
 def payment_transaction(cost):
     while True:
