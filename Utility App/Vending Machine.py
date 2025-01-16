@@ -141,5 +141,5 @@ def Dispensing_unit():
                         print(f"Sorry, {cookie['label']} is out of stock.")
 
 
-# Run the function to start the vending machine
+#run the function to start the vending machine
 Dispensing_unit()
